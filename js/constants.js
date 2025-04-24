@@ -22,7 +22,7 @@ class Constants {
     static TEXT_X_POS = 10;
     static TEXT_SIZE = 40;
 
-    static WIN_SCORE = 2;
+    static WIN_SCORE = 1;
 }
 
 // Exportar para otros módulos

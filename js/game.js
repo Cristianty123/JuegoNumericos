@@ -1,11 +1,12 @@
 // game.js
 class Ball {
-    constructor(rect, leftPaddle, rightPaddle, leftScoreText, rightScoreText) {
+    constructor(rect, leftPaddle, rightPaddle, leftScoreText, rightScoreText, game) {
         this.rect = rect;
         this.leftPaddle = leftPaddle;
         this.rightPaddle = rightPaddle;
         this.leftScoreText = leftScoreText;
         this.rightScoreText = rightScoreText;
+        this.game = game;
         this.subtract = false;
         this.vy = 10.0;
         this.vx = -70.0;
@@ -58,8 +59,8 @@ class Ball {
 
             if (rightScore >= Constants.WIN_SCORE) {
                 rightScore--;
-                alert("Ganó el jugador 2");
-                window.location.href = "game-menu.html";
+                this.game.showVictoryMessage(2);
+                return;
             }
         }
         // Punto para jugador izquierdo
@@ -69,8 +70,8 @@ class Ball {
             this.resetBall();
 
             if (leftScore + 1 >= Constants.WIN_SCORE) {
-                alert("Ganó el jugador 1");
-                window.location.href = "game-menu.html";
+                this.game.showVictoryMessage(1);
+                return;
             }
         }
     }
@@ -187,7 +188,53 @@ class PongGame {
         this.escapePressed = false;
         this.useAI = useAI;
 
+        // Elementos del DOM
+        this.pauseMenu = document.getElementById('pauseMenu');
+        this.victoryMenu = document.getElementById('victoryMenu');
+        this.victoryMessage = document.getElementById('victoryMessage');
+        this.playAgainBtn = document.getElementById('playAgain');
+        this.resumeBtn = document.getElementById('resume');
+        this.backToMenuBtn = document.getElementById('backToMenu');
+        this.victoryBackToMenuBtn = document.getElementById('victoryBackToMenu');
+
+        // Configurar eventos
+        this.setupEventListeners();
+
         this.initGameObjects();
+        this.pauseMenu.style.display = 'none';
+        this.victoryMenu.style.display = 'none';
+    }
+
+    setupEventListeners() {
+        this.resumeBtn.addEventListener('click', () => {
+            this.isPaused = false;
+            this.pauseMenu.style.display = 'none';
+        });
+
+        this.backToMenuBtn.addEventListener('click', () => {
+            window.location.href = "game-menu.html";
+        });
+
+        this.playAgainBtn.addEventListener('click', () => {
+            // Recargar la página con el mismo modo de juego
+            const mode = this.useAI ? 'ai' : 'two';
+            window.location.href = `game.html?mode=${mode}`;
+        });
+
+        this.victoryBackToMenuBtn.addEventListener('click', () => {
+            window.location.href = "game-menu.html";
+        });
+    }
+
+    showVictoryMessage(winner) {
+        this.isPaused = true;
+        const winnerText = winner === 1 ?
+            'Player 1 Wins!' :
+            (this.useAI ? 'AI Wins!' : 'Player 2 Wins!');
+
+        this.victoryMessage.textContent = winnerText;
+        this.victoryMenu.style.display = 'flex';
+        this.pauseMenu.style.display = 'none'; // Asegurar que el menú de pausa no esté visible
     }
 
     initGameObjects() {
@@ -195,8 +242,6 @@ class PongGame {
 
         this.leftScoreText = new Text("0", font, Constants.TEXT_X_POS, Constants.TEXT_Y_POS);
         this.rightScoreText = new Text("0", font, Constants.SCREEN_WIDTH - Constants.TEXT_X_POS - 16, Constants.TEXT_Y_POS);
-        this.resumeText = new Text("Resume", "30px Times New Roman", Constants.SCREEN_WIDTH / 2 - 50, Constants.SCREEN_HEIGHT / 2 - 20);
-        this.backToMenuText = new Text("Back to Menu", "30px Times New Roman", Constants.SCREEN_WIDTH / 2 - 90, Constants.SCREEN_HEIGHT / 2 + 40);
 
         this.playerOne = new Rect(Constants.HZ_PADDING, 40, Constants.PADDLE_WIDTH, Constants.PADDLE_HEIGHT, Constants.PADDLE_COLOR);
         this.playerOneController = new PlayerOneController(this.playerOne, this.keyListener);
@@ -205,7 +250,7 @@ class PongGame {
 
         // Primero creamos la pelota
         this.ballRect = new Rect(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2, Constants.BALL_WIDTH, Constants.BALL_WIDTH, Constants.PADDLE_COLOR);
-        this.ball = new Ball(this.ballRect, this.playerOne, this.playerTwo, this.leftScoreText, this.rightScoreText);
+        this.ball = new Ball(this.ballRect, this.playerOne, this.playerTwo, this.leftScoreText, this.rightScoreText, this);
 
         // Luego creamos los controladores según el modo
         if (this.useAI) {
@@ -244,6 +289,12 @@ class PongGame {
             if (!this.escapePressed) {
                 this.isPaused = !this.isPaused;
                 this.escapePressed = true;
+                // Mostrar/ocultar menú de pausa
+                this.pauseMenu.style.display = this.isPaused ? 'flex' : 'none';
+                // Asegurarse de ocultar menú de victoria si se reanuda
+                if (!this.isPaused) {
+                    this.victoryMenu.style.display = 'none';
+                }
             }
         } else {
             this.escapePressed = false;
@@ -274,39 +325,9 @@ class PongGame {
         this.playerTwo.draw(this.ctx);
         this.ballRect.draw(this.ctx);
 
-        // Dibujar menú de pausa si es necesario
-        if (this.isPaused) {
-            this.drawPauseMenu();
-        }
     }
 
-    drawPauseMenu() {
-        this.resumeText.draw(this.ctx);
-        this.backToMenuText.draw(this.ctx);
 
-        this.handleTextInteraction(this.resumeText, () => this.isPaused = false);
-        this.handleTextInteraction(this.backToMenuText, () => {
-            this.isRunning = false;
-            window.location.href = "game-menu.html";
-        });
-    }
-
-    handleTextInteraction(text, action) {
-        const mouseX = this.mouseListener.getMouseX();
-        const mouseY = this.mouseListener.getMouseY();
-
-        if (mouseX > text.x && mouseX < text.x + text.width &&
-            mouseY > text.y - text.height && mouseY < text.y) {
-
-            text.color = "#9e9e9e";
-
-            if (this.mouseListener.isMousePressed()) {
-                action();
-            }
-        } else {
-            text.color = "#FFFFFF";
-        }
-    }
 }
 
 // Extender Math para incluir signum si no existe

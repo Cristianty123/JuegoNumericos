@@ -10,9 +10,18 @@
 <div class="background"></div>
 <div class="game-container">
     <canvas id="gameCanvas"></canvas>
-    <div class="pause-menu" id="pauseMenu">
-        <div class="pause-option" id="resume">Resume</div>
-        <div class="pause-option" id="backToMenu">Back to Menu</div>
+
+    <!-- Menú de pausa minimalista -->
+    <div class="pause-menu" id="pauseMenu" style="display: none;">
+        <div class="pause-text" id="resume">Resume</div>
+        <div class="pause-text" id="backToMenu">Back to Menu</div>
+    </div>
+
+    <!-- Mensaje de victoria minimalista -->
+    <div class="victory-menu" id="victoryMenu" style="display: none;">
+        <div class="victory-text" id="victoryMessage"></div>
+        <div class="victory-option" id="playAgain">Play Again</div>
+        <div class="victory-option" id="victoryBackToMenu">Main Menu</div>
     </div>
 </div>
 

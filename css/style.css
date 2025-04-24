@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', serif;
+}
+
+body {
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/background.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    filter: brightness(0.4);
+}
+
+/* Estilos del menú principal */
+.menu-container {
+    text-align: center;
+    color: white;
+    z-index: 1;
+}
+
+.game-title {
+    font-size: 130px;
+    margin-bottom: 80px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.menu-option {
+    font-size: 40px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.menu-option:hover {
+    color: #9e9e9e;
+}
+
+/* Estilos del juego */
+.game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid white;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+#gameCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Menú de pausa */
+.pause-menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    display: none;
+}
+
+.pause-option {
+    font-size: 30px;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.pause-option:hover {
+    color: #9e9e9e;
+}

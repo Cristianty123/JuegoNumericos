@@ -1,3 +1,4 @@
+//utils.js
 class Rect {
     constructor(x, y, width, height, color) {
         this.x = x;

@@ -1,3 +1,4 @@
+// menu.js
 document.addEventListener('DOMContentLoaded', () => {
     const twoPlayersBtn = document.getElementById('two-players');
     const onePlayerBtn = document.getElementById('one-player');
@@ -12,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     exitBtn.addEventListener('click', () => {
-        window.close();
+        window.location.href = 'index.html';
     });
 
     // Efecto hover para los botones

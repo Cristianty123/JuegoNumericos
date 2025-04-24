@@ -3,21 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong - Métodos Numéricos</title>
+    <title>Videojuego Pong - Métodos Numéricos</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="background"></div>
-<div class="menu-container">
-    <h1 class="game-title">Pong</h1>
-    <div class="menu-options">
-        <div class="menu-option" id="two-players">Two Players</div>
-        <div class="menu-option" id="one-player">One Player</div>
-        <div class="menu-option" id="exit">Exit</div>
-    </div>
-</div>
 
-<script src="js/constants.js"></script>
-<script src="js/menu.js"></script>
+<main class="main-content">
+    <h1 class="main-title">VIDEOJUEGO PONG</h1>
+
+    <div class="game-description">
+        <h2>¿Qué es Pong Métodos Numéricos?</h2>
+        <p>
+            Una versión educativa del clásico Pong que implementa el método numérico
+            de la secante para controlar la inteligencia artificial del oponente.
+        </p>
+
+        <h2>¿Cómo jugar?</h2>
+        <p>
+            <strong>Modo 1 jugador:</strong> Usa las teclas W (arriba) y S (abajo) para mover tu paleta contra la IA.<br>
+            <strong>Modo 2 jugadores:</strong> Jugador 1 usa W/S, Jugador 2 usa flechas arriba/abajo.
+        </p>
+
+        <h2>Método numérico implementado</h2>
+        <p>
+            <strong>Método de la Secante:</strong> Técnica iterativa para encontrar raíces de funciones,
+            aplicada aquí para predecir la trayectoria de la pelota y mover la paleta de la IA.
+        </p>
+
+        <div class="try-it">
+            <h2>¡PRUÉBALO AHORA!</h2>
+            <a href="game-menu.html" class="play-button">JUGAR</a>
+        </div>
+    </div>
+</main>
 </body>
 </html>

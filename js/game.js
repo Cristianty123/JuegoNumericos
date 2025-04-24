@@ -1,3 +1,4 @@
+// game.js
 class Ball {
     constructor(rect, leftPaddle, rightPaddle, leftScoreText, rightScoreText) {
         this.rect = rect;
@@ -58,7 +59,7 @@ class Ball {
             if (rightScore >= Constants.WIN_SCORE) {
                 rightScore--;
                 alert("Ganó el jugador 2");
-                window.location.href = "index.html";
+                window.location.href = "game-menu.html";
             }
         }
         // Punto para jugador izquierdo
@@ -69,7 +70,7 @@ class Ball {
 
             if (leftScore + 1 >= Constants.WIN_SCORE) {
                 alert("Ganó el jugador 1");
-                window.location.href = "index.html";
+                window.location.href = "game-menu.html";
             }
         }
     }
@@ -286,6 +287,7 @@ class PongGame {
         this.handleTextInteraction(this.resumeText, () => this.isPaused = false);
         this.handleTextInteraction(this.backToMenuText, () => {
             this.isRunning = false;
+            window.location.href = "game-menu.html";
         });
     }
 

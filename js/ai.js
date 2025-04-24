@@ -1,3 +1,4 @@
+//ai.js
 class AI {
     constructor(playerTwoController, ballRect) { // Cambiamos el parámetro de ball a ballRect
         this.playerTwoController = playerTwoController;

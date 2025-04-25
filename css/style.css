@@ -326,6 +326,157 @@ body {
     border-radius: 8px;
 }
 
+/* ===== SECCIÓN DE VOTACIÓN ===== */
+.vote-section {
+    width: 100%;
+    margin: 0 auto 40px; /* Igual que game-description */
+    display: flex;
+    justify-content: center;
+}
+
+.vote-container {
+    background: rgba(0, 0, 0, 0.7);
+    margin-top: 40px;
+    border: 3px solid #FF4500; /* Mismo grosor que game-description */
+    border-radius: 15px;
+    padding: 30px; /* Mismo padding que game-description */
+
+    max-width: 800px; /* Mismo ancho máximo que game-description */
+    box-shadow: 0 0 15px rgba(255, 69, 0, 0.3); /* Misma sombra */
+    position: relative;
+    overflow: hidden;
+    width: 100%; /* Asegura que respete el max-width */
+}
+
+.vote-container::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px dashed #FFD700;
+    border-radius: 20px;
+    animation: rotate 20s linear infinite;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.vote-title {
+    font-size: 2.5em;
+    color: #FFD700;
+    text-shadow: 3px 3px 0px black,
+    -1px -1px 0px #FF4500;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.vote-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.vote-gif {
+    min-width: 0;
+    max-width: 300px;
+    max-height: 250px;
+    border: 3px solid #3E53EE;
+    box-shadow: 0 0 15px rgba(62, 83, 238, 0.3);
+    overflow: hidden;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.pixel-gif {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    image-rendering: pixelated;
+}
+
+.vote-text {
+    flex: 1;
+    min-width: 300px;
+    font-size: 1.2em;
+    line-height: 1.6;
+    text-shadow: 1px 1px 0px black;
+}
+
+.vote-text p {
+    margin-bottom: 20px;
+}
+
+.vote-button {
+    display: inline-block;
+    background-color: rgba(62, 83, 238, 0.8); /* Azul */
+    color: white;
+    padding: 12px 30px;
+    font-size: 1.3em;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 2px solid #FFD700; /* Amarillo */
+    transition: all 0.3s;
+    text-shadow: 2px 2px 0px black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.vote-button:hover {
+    background-color: rgba(255, 69, 0, 0.8); /* Rojo */
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(255, 69, 0, 0.4); /* Sombra roja */
+}
+
+/* Animación para el borde */
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Efecto pixelado para textos */
+.vote-title, .vote-button {
+    font-family: 'Pixelify Sans', sans-serif;
+    image-rendering: pixelated;
+}
+
+/* Efecto de parpadeo para el título de votación */
+@keyframes blink {
+    0%, 100% { opacity: 1; text-shadow: 3px 3px 0px black, -1px -1px 0px #FF4500; }
+    50% { opacity: 0.8; text-shadow: 3px 3px 0px black, 0 0 8px #FFD700; }
+}
+
+.vote-title {
+    animation: blink 2s infinite;
+}
+
+/* Efecto de vibración al pasar el mouse */
+.vote-button:hover {
+    animation: vibrate 0.3s linear infinite;
+}
+
+@keyframes vibrate {
+    0% { transform: translate(0) scale(1.05); }
+    20% { transform: translate(-2px, 2px) scale(1.05); }
+    40% { transform: translate(-2px, -2px) scale(1.05); }
+    60% { transform: translate(2px, 2px) scale(1.05); }
+    80% { transform: translate(2px, -2px) scale(1.05); }
+    100% { transform: translate(0) scale(1.05); }
+}
+
+/* Efecto de brillo para el contenedor */
+.vote-container:hover {
+    box-shadow: 0 0 30px rgba(255, 69, 0, 0.6);
+    transition: box-shadow 0.5s ease;
+}
+
 /* Menú de pausa */
 .pause-menu {
     position: absolute;

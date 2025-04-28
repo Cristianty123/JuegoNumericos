@@ -1,43 +1,94 @@
 //ai.js
 class AI {
-    constructor(playerTwoController, ballRect) { // Cambiamos el parámetro de ball a ballRect
+    constructor(playerTwoController, ballRect) {
         this.playerTwoController = playerTwoController;
-        this.ballRect = ballRect; // Ahora almacenamos ballRect directamente
-        this.prevY = playerTwoController.rect.y;
-        this.prevF = this.calculateF(this.prevY);
-    }
+        this.ballRect = ballRect;
 
-    calculateF(y) {
-        const yObjetivo = this.ballRect.y; // Accedemos a ballRect en lugar de ball.rect
-        return y - yObjetivo;
+        // Variables para seguimiento de la pelota
+        this.lastBallX = ballRect.x;
+        this.lastBallY = ballRect.y;
+        this.lastTime = performance.now();
+        this.ballVX = 0;
+        this.ballVY = 0;
     }
 
     update(dt) {
-        this.playerTwoController.update(dt);
-        const y = this.playerTwoController.rect.y;
-        const fY = this.calculateF(y);
+        // 1. Calcular velocidades actuales de la pelota
+        this.calculateBallVelocity();
 
-        // Método de la secante
-        if (Math.abs(fY - this.prevF) > 1e-6) {
-            let newY = y - fY * (y - this.prevY) / (fY - this.prevF);
+        // 2. Solo actuar si la pelota se mueve hacia la paleta (vx > 0)
+        if (this.ballVX > 0) {
+            // 3. Predecir posición futura
+            const targetY = this.predictFuturePosition();
 
-            // Pequeño ajuste aleatorio si el cambio es muy pequeño
-            if (Math.abs(newY - y) < 1e-3) {
-                newY = y + (Math.random() > 0.5 ? 1 : -1) * dt * 5;
-            }
+            // 4. Mover la paleta
+            this.movePaddleToTarget(targetY, dt);
+        }
+    }
 
-            this.prevY = y;
-            this.prevF = fY;
+    calculateBallVelocity() {
+        const now = performance.now();
+        const deltaTime = (now - this.lastTime) / 1000;
 
-            if (newY < y) {
-                this.playerTwoController.moveUp(dt);
+        if (deltaTime > 0) {
+            this.ballVX = (this.ballRect.x - this.lastBallX) / deltaTime;
+            this.ballVY = (this.ballRect.y - this.lastBallY) / deltaTime;
+
+            // Actualizar valores para el próximo frame
+            this.lastBallX = this.ballRect.x;
+            this.lastBallY = this.ballRect.y;
+            this.lastTime = now;
+        }
+    }
+
+    predictFuturePosition() {
+        const paddleX = this.playerTwoController.rect.x;
+        const distanceX = paddleX - this.ballRect.x;
+
+        // Tiempo estimado hasta llegar a la paleta
+        const timeToReachPaddle = distanceX / this.ballVX;
+
+        // Posición Y predicha (sin considerar rebotes)
+        let predictedY = this.ballRect.y + this.ballVY * timeToReachPaddle;
+
+        // Considerar rebotes en los bordes
+        const canvasHeight = Constants.SCREEN_HEIGHT - Constants.TOOLBAR_HEIGHT - Constants.INSETS_BOTTOM;
+        const ballHeight = this.ballRect.height;
+
+        // Aplicar rebotes virtuales
+        while (predictedY < Constants.TOOLBAR_HEIGHT || predictedY > canvasHeight - ballHeight) {
+            if (predictedY < Constants.TOOLBAR_HEIGHT) {
+                predictedY = 2 * Constants.TOOLBAR_HEIGHT - predictedY;
             } else {
-                this.playerTwoController.moveDown(dt);
+                predictedY = 2 * (canvasHeight - ballHeight) - predictedY;
             }
+            this.ballVY *= -1; // Invertir dirección al rebotar
+        }
+
+        return predictedY;
+    }
+
+    movePaddleToTarget(targetY, dt) {
+        const paddle = this.playerTwoController.rect;
+        const paddleCenter = paddle.y + paddle.height / 2;
+        const targetPaddleY = targetY - paddle.height / 2;
+
+        // Margen para evitar oscilaciones
+        const margin = 5;
+
+        // Limitar movimiento a los bordes del canvas
+        const minY = Constants.TOOLBAR_HEIGHT;
+        const maxY = Constants.SCREEN_HEIGHT - Constants.INSETS_BOTTOM - paddle.height;
+        const clampedTarget = Math.max(minY, Math.min(maxY, targetPaddleY));
+
+        // Decidir dirección de movimiento
+        if (paddle.y < clampedTarget - margin) {
+            this.playerTwoController.moveDown(dt);
+        } else if (paddle.y > clampedTarget + margin) {
+            this.playerTwoController.moveUp(dt);
         }
     }
 }
-
 // Exportar para otros módulos
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = AI;

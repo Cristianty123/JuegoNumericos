@@ -1,12 +1,7 @@
 // menu.js
 document.addEventListener('DOMContentLoaded', () => {
-    const twoPlayersBtn = document.getElementById('two-players');
     const onePlayerBtn = document.getElementById('one-player');
     const exitBtn = document.getElementById('exit');
-
-    twoPlayersBtn.addEventListener('click', () => {
-        window.location.href = 'game.html?mode=two';
-    });
 
     onePlayerBtn.addEventListener('click', () => {
         window.location.href = 'game.html?mode=ai';
